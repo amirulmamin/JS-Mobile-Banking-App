@@ -15,15 +15,18 @@
         </h1>
         <h2 class="text-center text-xl font-semibold">Mobile Banking</h2>
         <h3 class="text-center text-xs">Sign in to your account</h3>
-        <form class="flex flex-col gap-4 p-6 mt-6">
+        <!-- Login Form -->
+        <form class="flex flex-col gap-4 p-6 mt-6" id="loginform">
             <div class="flex flex-col gap-2">
                 <label for="email" class="text-sm font-medium text-gray-700">Email</label>
-                <input id="email" name="email" type="email" class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input id="email" name="email" type="email" required class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
+
             <div class="flex flex-col gap-2">
                 <label for="password" class="text-sm font-medium text-gray-700">Email</label>
-                <input id="password" name="password" type="password" class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <input id="password" name="password" type="password" class="border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
             </div>
+
             <div class="flex items-center justify-between text-sm">
                 <label class="flex items-center gap-2 text-gray-700">
                     <input id="remember" name="remember" type="checkbox" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500" />
@@ -31,12 +34,37 @@
                 </label>
                 <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline">Forget Password</a>
             </div>
+
             <button type="submit" class="bg-blue-600 text-white rounded-lg p-3 mt-2 hover:bg-blue-700 transition">Sign-In</button>
             <p class="text-center text-sm text-gray-600 mt-2">
                 Don't have an account?
                 <a href="#" class="text-blue-600 hover:text-blue-700 hover:underline font-medium">Sign Up</a>
             </p>
         </form>
+
+        <script>
+            document.getElementById("loginForm").addEventListener("submit", e => {
+                e.preventDefault();
+                e.stopPropagation();
+                const formData = new FormData(e.target);
+                const email = formData.get("email");
+                const password = formData.get("password");
+
+                if(email === "user&example.com"  && password === "password123") {
+                    localStorage.setItem("loggedIn", "true");
+                    localStorage.setItem("balance", 5000);
+                    alert("Login Successful!");
+                    window.location.href = "dashboard.html";
+                } else {
+                    alert("Invalid email or password.");
+                }
+            })
+
+            if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
+                window.location.href = "dashboard.html";
+            }
+        </script>
+
      </div>
   </body>
 </html>

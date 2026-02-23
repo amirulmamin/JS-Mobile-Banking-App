@@ -80,5 +80,14 @@
             </a>
         </footer>
      </div>
+
+     <script>
+        if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
+            // user is logged In, stay on the dashboard
+        } else {
+            // user is not logged In, redirect to login page
+            window.location.href = "index.html";
+        }
+     </script>
   </body>
 </html>

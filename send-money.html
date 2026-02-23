@@ -24,7 +24,7 @@
             </section>
             <section class="p-6 border rounded-lg bg-white/10 mt-4">
                 <h2 class="text-sm">Total Balance</h2>
-                <p class="text-xl font-bold">$5250.75</p>
+                <p class="text-xl font-bold" id="balance">$5250.75</p>
             </section>
         </header>
         <main class="px-6 grid grid-cols-4 gap-1 *:border *:flex *:flex-col *:items-center *:gap-2 -mt-6 *:aspect-square *:justify-center *:rounded-lg *:bg-white/80 *:cursor-pointer *:hover:bg-white/90 *:transition-all *:duration-300  *:[&>i]:text-2xl *:[&>span]:text-xs *:[&.active]:bg-blue-600 *:[&.active]:text-white">
@@ -74,5 +74,16 @@
             </a>
         </footer>
      </div>
+
+     <script>
+        if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
+            // user is logged In, stay on the dashboard
+            let balance = localStorage.getItem("balance");
+            document.querySelector("h1").innerText = 'Balance: BDT (balance)';
+        } else {
+            // user is not logged In, redirect to login page
+            window.location.href = "index.html";
+        }
+     </script>
   </body>
 </html>

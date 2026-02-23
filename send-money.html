@@ -47,7 +47,7 @@
         </main>
         <main class="p-6">
             <!-- Send Money Form -->
-            <form action="">
+            <form action="" id="sendMoneyForm">
                  <label for="recipient" class="block mb-2 font-semibold">Recipient:</label>
                  <input type="text" id="recipient" name="recipient" placeholder="Enter Recipient's Name or Number" class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" />
                  <label for="amount" class="block mb-2 font-semibold">Enter Amount to Send:</label>
@@ -84,6 +84,47 @@
             // user is not logged In, redirect to login page
             window.location.href = "index.html";
         }
+
+        const sendMoneyForm = document.getElementById('sendMoneyForm')
+        sendMoneyForm.addEventListener('submit', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            const formData = new FormData('sendMoneyForm');
+            const recipient = formData.get('recipient');
+            const amount = +formData.get('amount');
+            if (!recipient || !amount) {
+                alert('Please fill in all fields');
+                return;
+            }
+            let balance = +localStorage.getItem("balance");
+            if (amount > balance) {
+                alert ('Insufficient Balance');
+                return;
+            }
+
+                // Update Balance
+                balance -= amount;
+                localStorage.setItem("balance", balance);
+                const transaction = {
+                id: Date.now(),
+                type: 'send-money',
+                source: 'My Account',
+                sourceDetails: recipient,
+                amount,
+                date: new Date().toLocaleDateString()
+            };
+                //transaction
+            if(!localStorage.getItem('history')){
+                localStorage.setItem('history', JSON.stringify([transaction]));
+            } else {
+                const existingHistory = JSON.parse(localStorage.getItem('history'));
+                existingHistory.push(transaction);
+                localStorage.setItem('history', JSON.stringify(existingHistory));
+            }
+            alert('Send Money Successful!')
+            sendMoneyForm.reset();
+            document.getElementById('balance').innerText = 'BDT' (balance);
+        })
      </script>
   </body>
 </html>

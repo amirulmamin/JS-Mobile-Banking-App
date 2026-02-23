@@ -47,9 +47,9 @@
         </main>
         <main class="p-6">
             <!-- Pay Bill Form -->
-            <form action="">
+            <form action="" id="payBillForm">
                 <label for="bill-type">Select Bill Type</label>
-                <select class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" id="bill-type">
+                <select class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" id="bill-type" name="payBillForm">
                     <option value="electricity">Electricity Bill</option>
                     <option value="Water">Water Bill</option>
                     <option value="internet">Internet Bill</option>
@@ -80,7 +80,7 @@
         </footer>
         <script>
             const billType = document.getElementById('bill-type')
-            billType.addEventListener('change', e => {
+            billType.addEventListener('click', e => {
                 const selected = e.target.value;
                 const input = document.createElement('input');
                 input.type = 'text';
@@ -106,9 +106,45 @@
         </script>
 
         <script>
+            let balance = localStorage.getItem("balance");
+            const payBillForm = document.getElementById('payBillForm');
+            payBillForm.addEventListener('submit', e => {
+                e.preventDefault();
+                e.stopPropagation();
+                const formData = new FormData(payBillForm);
+                const amount = +formData.get('amount');
+                if (amount > balance) {
+                    alert('Insufficient Balance');
+                    return;
+                }
+                const sourceDetails = formData.get('source-details');
+                // Update Balance
+                balance -= amount;
+                localStorage.setItem("balance", balance);
+                const transaction = {
+                id: Date.now(),
+                type: 'pay-bill',
+                source: formData.get('bill-type'),
+                sourceDetails,
+                amount,
+                date: new Date().toLocaleDateString()
+            };
+                //transaction
+            if(!localStorage.getItem('history')){
+                localStorage.setItem('history', JSON.stringify([transaction]));
+            } else {
+                const existingHistory = JSON.parse(localStorage.getItem('history'));
+                existingHistory.push(transaction);
+                localStorage.setItem('history', JSON.stringify(existingHistory));
+            }
+
+                alert('Bill Paid Successfully');
+                payBillForm.reset();
+                document.getElementById('amount').innerText = 'BDT (Balance)'; 
+            })
+
             if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
                 // user is logged In, stay on the dashboard
-                let balance = localStorage.getItem("balance");
                 document.querySelector("h1").innerText = 'Balance: BDT (balance)';
             } else {
                 // user is not logged In, redirect to login page

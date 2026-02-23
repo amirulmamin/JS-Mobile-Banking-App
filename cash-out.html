@@ -47,7 +47,7 @@
         </main>
         <main class="p-6">
             <!-- Cash Out Form -->
-             <form action="">
+             <form action="" id="cashOutForm">
                 <!-- Add AGent Number -->
                  <label for="agent-number" class="block mb-2 font-semibold">Enter Agent Number</label>
                  <input type="text" id="agent-number" name="agent-number" placeholder="Agent Number" class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" />
@@ -85,6 +85,47 @@
             // user is not logged In, redirect to login page
             window.location.href = "index.html";
         }
+
+        const cashOutForm = document.getElementById('cashOutForm')
+        cashOutForm.addEventListener('submit', e => {
+            e.preventDefault();
+            e.stopPropagation();
+            const formData = new FormData('cashOutForm');
+            const agentNumber = formData.get('agent-number');
+            const amount = +formData.get('amount');
+            if (!agentNumber || !amount) {
+                alert('Please fill in all fields');
+                return;
+            }
+            let balance = +localStorage.getItem("balance");
+            if (amount > balance) {
+                alert ('Insufficient Balance');
+                return;
+            }
+
+                // Update Balance
+                balance -= amount;
+                localStorage.setItem("balance", balance);
+                const transaction = {
+                id: Date.now(),
+                type: 'cash-out',
+                source: 'Agent',
+                sourceDetails: agentNumber,
+                amount,
+                date: new Date().toLocaleDateString()
+            };
+                //transaction
+            if(!localStorage.getItem('history')){
+                localStorage.setItem('history', JSON.stringify([transaction]));
+            } else {
+                const existingHistory = JSON.parse(localStorage.getItem('history'));
+                existingHistory.push(transaction);
+                localStorage.setItem('history', JSON.stringify(existingHistory));
+            }
+            alert('Cash Out Successful!')
+            cashOutForm.reset();
+            document.getElementById('balance').innerText = 'BDT' (balance);
+        })
      </script>
   </body>
 </html>

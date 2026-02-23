@@ -27,7 +27,7 @@
                 <p class="text-xl font-bold">$5250.75</p>
             </section>
         </header>
-        <main class="px-6 grid grid-cols-4 gap-1 *:border *:flex *:flex-col *:items-center *:gap-2 -mt-6 *:aspect-square *:justify-center *:rounded-lg *:bg-white/80 *:cursor-pointer *:hover:bg-white/90 *:transition-all *:duration-300  *:[&>i]:text-2xl *:[&>span]:text-xs">
+        <main class="px-6 grid grid-cols-4 gap-1 *:border *:flex *:flex-col *:items-center *:gap-2 -mt-6 *:aspect-square *:justify-center *:rounded-lg *:bg-white/80 *:cursor-pointer *:hover:bg-white/90 *:transition-all *:duration-300  *:[&>i]:text-2xl *:[&>span]:text-xs *:[&.active]:bg-blue-600 *:[&.active]:text-white">
             <a href="./add-money.html">
                 <i class="fa-solid fa-dollar-sign"></i>
                 <span>Add Money</span>
@@ -40,18 +40,28 @@
                 <i class="fa-solid fa-money-bill-transfer"></i>
                 <span>Send Money</span>
             </a>
-            <a href="./pay-bill.html">
+            <a href="./pay-bill.html" class="active">
                 <i class="fa-solid fa-credit-card"></i>
                 <span>Pay Bill</span>
             </a>
         </main>
         <main class="p-6">
-            <figure>
-                <img src="./images/Bangladesh Government logo.webp" alt="" class="w-full">
-            </figure>
+            <!-- Pay Bill Form -->
+            <form action="">
+                <label for="bill-type">Select Bill Type</label>
+                <select class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" id="bill-type">
+                    <option value="electricity">Electricity Bill</option>
+                    <option value="Water">Water Bill</option>
+                    <option value="internet">Internet Bill</option>
+                    <option value="phone">Phone Bill</option>
+                </select>
+                <label for="amount" class="block mb-2 font-semibold">Enter Amount to Pay Bill</label>
+                <input type="number" id="amount" name="amount" placeholder="$0.00" class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" />
+                <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition">Pay Bill</button>
+             </form>
         </main>
         <footer class="absolute bottom-0 right-0 left-0 grid grid-cols-4 gap-[1px] *:flex *:flex-col *:items-center *:gap-2 *:aspect-square *:justify-center *:bg-blue-600 *:text-white *:cursor-pointer *:hover:bg-blue-600/90 *:transition-all *:duration-300  *:[&>i]:text-2xl *:[&>span]:text-xs *:[&.active]:bg-blue-800 *:[&.active]:font-bold">
-            <a href="./dashboard.html" class="active">
+            <a href="./dashboard.html">
                 <i class="fa-solid fa-house-user"></i>
                 <span>Home</span>
             </a>
@@ -68,6 +78,32 @@
                 <span>Log Out</span>
             </a>
         </footer>
+        <script>
+            const billType = document.getElementById('bill-type')
+            billType.addEventListener('change', e => {
+                const selected = e.target.value;
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.name = 'source-details';
+                input.className = 'w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600';
+                if (selected === 'electricity') {
+                    input.placeholder = 'Electricity Account Number';
+                } else if (selected === 'water') {
+                    input.placeholder = 'Water Account Number';
+                } else if ( selected === 'internet') {
+                    input.placeholder = 'Internet Account Number';
+                }else if ( selected === 'phone') {
+                    input.placeholder = 'Phone Account Number';
+                }
+                // Remove any existing source details input
+                const existingInput = document.querySelector('input[name="source-details"]');
+                if (existingInput) {
+                    existingInput.remove();
+                }
+                //Insert the new input after the select element
+                billType.insertAdjacentElement('afterend', input);
+            })
+        </script>
      </div>
   </body>
 </html>

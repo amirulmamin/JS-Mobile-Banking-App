@@ -140,7 +140,7 @@
 
                 alert('Bill Paid Successfully');
                 payBillForm.reset();
-                document.getElementById('amount').innerText = 'BDT (Balance)'; 
+                document.getElementById('amount').innerText = `BDT ${balance}`; 
             })
 
             if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {

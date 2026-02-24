@@ -70,10 +70,10 @@
      </div>
      
      <script>
-        if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
-            // user is logged In, stay on the dashboard
-            let balance = localStorage.getItem("balance");
-            document.getElementById("balance").innerText = 'BDT' (balance);
+        if (localStorage.getItem("loggedIn") === "true") {
+            // user is logged in, display balance and history
+            let balance = parseFloat(localStorage.getItem("balance")) || 0;
+            document.getElementById("balance").innerText = `BDT ${balance.toFixed(2)}`;
             const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
             const transactionsContainer = document.getElementById('transactions');
             transactionsContainer.innerHTML = '';
@@ -89,7 +89,7 @@
                 transactionsContainer.appendChild(txnElement);
             }) 
         } else {
-            // user is not logged In, redirect to login page
+            // not logged in, redirect
             window.location.href = "index.html";
         }
      </script>

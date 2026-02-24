@@ -49,6 +49,7 @@
                 const formData = new FormData(e.target);
                 const email = formData.get("email");
                 const password = formData.get("password");
+                const remember = formData.get("remember") === "on";
 
                 if(email === "user@example.com"  && password === "password123") {
                     localStorage.setItem("loggedIn", "true");

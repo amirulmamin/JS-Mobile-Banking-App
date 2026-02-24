@@ -46,9 +46,8 @@
             </a>
         </main>
         <main class="p-6">
-            <figure>
-                <img src="./images/Bangladesh Government logo.webp" alt="" class="w-full">
-            </figure>
+            <div id="transactions" class="h-96 overflow-y-scroll">
+            </div>
         </main>
         <footer class="absolute bottom-0 right-0 left-0 grid grid-cols-4 gap-[1px] *:flex *:flex-col *:items-center *:gap-2 *:aspect-square *:justify-center *:bg-blue-600 *:text-white *:cursor-pointer *:hover:bg-blue-600/90 *:transition-all *:duration-300  *:[&>i]:text-2xl *:[&>span]:text-xs *:[&.active]:bg-blue-800 *:[&.active]:font-bold">
             <a href="./dashboard.html">
@@ -74,7 +73,21 @@
         if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
             // user is logged In, stay on the dashboard
             let balance = localStorage.getItem("balance");
-            document.querySelector("h1").innerText = 'Balance: BDT (balance)';
+            document.getElementById("balance").innerText = 'BDT' (balance);
+            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const transactionsContainer = document.getElementById('transactions');
+            transactionsContainer.innerHTML = '';
+            transactions.forEach(txn => {
+                const txnElement = document.createElement('div');
+                txnElement.className = 'p-4 border rounded-lg mb-2';
+                txnElement.innerHTML = `
+                    <p class="font-semibold">${txn.type}</p>    
+                    <p class="text-sm">${txn.source} to ${txn.sourceDetails}</p>    
+                    <p class="text-sm">Amount: BDT ${txn.amount}</p>    
+                    <p class="text-xs text-gray-500">${txn.date}</p>    
+                `;
+                transactionsContainer.appendChild(txnElement);
+            }) 
         } else {
             // user is not logged In, redirect to login page
             window.location.href = "index.html";

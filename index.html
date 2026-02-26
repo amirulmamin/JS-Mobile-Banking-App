@@ -43,6 +43,13 @@
         </form>
 
         <script>
+            // prefill email/checkbox if user previously asked to be remembered
+            const rememberedEmail = localStorage.getItem('rememberedEmail');
+            if (rememberedEmail) {
+                document.getElementById('email').value = rememberedEmail;
+                document.getElementById('remember').checked = true;
+            }
+
             document.getElementById("loginForm").addEventListener("submit", e => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -52,6 +59,12 @@
                 const remember = formData.get("remember") === "on";
 
                 if(email === "user@example.com"  && password === "password123") {
+                    if (remember) {
+                        localStorage.setItem('rememberedEmail', email);
+                    } else {
+                        localStorage.removeItem('rememberedEmail');
+                    }
+
                     localStorage.setItem("loggedIn", "true");
                     localStorage.setItem("balance", 5000);
                     alert("Login Successful!");

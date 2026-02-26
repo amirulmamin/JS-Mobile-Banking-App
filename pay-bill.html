@@ -49,9 +49,9 @@
             <!-- Pay Bill Form -->
             <form action="" id="payBillForm">
                 <label for="bill-type">Select Bill Type</label>
-                <select class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" id="bill-type" name="payBillForm">
+                <select class="w-full p-3 border rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-600" id="bill-type" name="bill-type">
                     <option value="electricity">Electricity Bill</option>
-                    <option value="Water">Water Bill</option>
+                    <option value="water">Water Bill</option>
                     <option value="internet">Internet Bill</option>
                     <option value="phone">Phone Bill</option>
                 </select>
@@ -79,9 +79,9 @@
             </a>
         </footer>
         <script>
-            const billType = document.getElementById('bill-type')
-            billType.addEventListener('click', e => {
-                const selected = e.target.value;
+            const billType = document.getElementById('bill-type');
+            function updateSourceInput(value) {
+                const selected = value.toLowerCase();
                 const input = document.createElement('input');
                 input.type = 'text';
                 input.name = 'source-details';
@@ -90,23 +90,24 @@
                     input.placeholder = 'Electricity Account Number';
                 } else if (selected === 'water') {
                     input.placeholder = 'Water Account Number';
-                } else if ( selected === 'internet') {
+                } else if (selected === 'internet') {
                     input.placeholder = 'Internet Account Number';
-                }else if ( selected === 'phone') {
+                } else if (selected === 'phone') {
                     input.placeholder = 'Phone Account Number';
+                } else {
+                    return; // no valid selection, do nothing
                 }
-                // Remove any existing source details input
                 const existingInput = document.querySelector('input[name="source-details"]');
-                if (existingInput) {
-                    existingInput.remove();
-                }
-                //Insert the new input after the select element
+                if (existingInput) existingInput.remove();
                 billType.insertAdjacentElement('afterend', input);
-            })
+            }
+            billType.addEventListener('change', e => updateSourceInput(e.target.value));
+            // initialize on load with current value
+            updateSourceInput(billType.value);
         </script>
 
         <script>
-            let balance = localStorage.getItem("balance");
+            let balance = parseFloat(localStorage.getItem("balance")) || 0;
             const payBillForm = document.getElementById('payBillForm');
             payBillForm.addEventListener('submit', e => {
                 e.preventDefault();
@@ -140,12 +141,12 @@
 
                 alert('Bill Paid Successfully');
                 payBillForm.reset();
-                document.getElementById('amount').innerText = `BDT ${balance}`; 
+                document.getElementById('balance').innerText = `BDT ${balance.toFixed(2)}`; 
             })
 
             if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
                 // user is logged In, stay on the dashboard
-                document.querySelector("h1").innerText = 'Balance: BDT (balance)';
+                document.getElementById("balance").innerText =  `BDT ${balance.toFixed(2)}`;
             } else {
                 // user is not logged In, redirect to login page
                 window.location.href = "index.html";

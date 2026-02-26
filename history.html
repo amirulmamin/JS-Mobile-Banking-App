@@ -70,11 +70,22 @@
      </div>
      
      <script>
+        // ensure old data is migrated from deprecated 'transactions' key to 'history'
+        if (localStorage.getItem('transactions') && !localStorage.getItem('history')) {
+            try {
+                const old = JSON.parse(localStorage.getItem('transactions'));
+                localStorage.setItem('history', JSON.stringify(old));
+                localStorage.removeItem('transactions');
+            } catch (_) {
+                // ignore parsing errors
+            }
+        }
+
         if (localStorage.getItem("loggedIn") === "true") {
             // user is logged in, display balance and history
             let balance = parseFloat(localStorage.getItem("balance")) || 0;
             document.getElementById("balance").innerText = `BDT ${balance.toFixed(2)}`;
-            const transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+            const transactions = JSON.parse(localStorage.getItem('history')) || [];
             const transactionsContainer = document.getElementById('transactions');
             transactionsContainer.innerHTML = '';
             transactions.forEach(txn => {
@@ -87,7 +98,7 @@
                     <p class="text-xs text-gray-500">${txn.date}</p>    
                 `;
                 transactionsContainer.appendChild(txnElement);
-            }) 
+            });
         } else {
             // not logged in, redirect
             window.location.href = "index.html";

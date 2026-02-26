@@ -80,7 +80,7 @@
         if(localStorage.getItem("loggedIn") && localStorage.getItem("loggedIn") === "true") {
             // user is logged In, stay on the dashboard
             let balance = localStorage.getItem("balance");
-            document.querySelector("h1").innerText = 'Balance: BDT (balance)';
+            document.getElementById("balance").innerText =  `BDT ${balance}`;
         } else {
             // user is not logged In, redirect to login page
             window.location.href = "index.html";
@@ -90,7 +90,7 @@
         cashOutForm.addEventListener('submit', e => {
             e.preventDefault();
             e.stopPropagation();
-            const formData = new FormData('cashOutForm');
+            const formData = new FormData(cashOutForm);
             const agentNumber = formData.get('agent-number');
             const amount = +formData.get('amount');
             if (!agentNumber || !amount) {

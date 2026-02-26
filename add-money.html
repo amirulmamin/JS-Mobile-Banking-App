@@ -136,10 +136,10 @@
             currentBalance += amount;
             localStorage.setItem('balance', currentBalance);
             document.getElementById('balance').innerText = 'BDT' + currentBalance.toFixed(2);
-            // Save to history
-            let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
-            transactions.push(history);
-            localStorage.setItem('transactions', JSON.stringify(transactions));
+            // no separate transactions key needed; 'history' already updated above
+            // (previous implementation erroneously tried to push variable 'history' into a
+            // non-existent array)
+
             addMoneyForm.reset();
             alert('Money added successfully!');
         })

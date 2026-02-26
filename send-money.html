@@ -89,7 +89,7 @@
         sendMoneyForm.addEventListener('submit', e => {
             e.preventDefault();
             e.stopPropagation();
-            const formData = new FormData('sendMoneyForm');
+            const formData = new FormData(sendMoneyForm);
             const recipient = formData.get('recipient');
             const amount = +formData.get('amount');
             if (!recipient || !amount) {
